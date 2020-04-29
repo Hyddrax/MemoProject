@@ -47,6 +47,25 @@ public class MainActivity extends AppCompatActivity {
         this.recyclerView.setLayoutManager(layoutManager);
 
         this.listMemo = AppDatabaseHelper.getDatabase(this).memoDAO().getListeMemos();
+        if(this.listMemo.isEmpty()){
+            for (int i=0; i<10; i++){
+                MemoDTO tmpMemo = new MemoDTO();
+                tmpMemo.init("Generated Memo " + (i+1), "Generated Content " + (i+1));
+                switch(i) {
+                    case 0:
+                        tmpMemo.content = "";
+                        break;
+                    case 9:
+                        for (int j = 0; j < 100; j++) {
+                            tmpMemo.content += "Remplissage pour tester la scrolle view !";
+                        }
+                        break;
+                }
+                AppDatabaseHelper.getDatabase(this).memoDAO().insert(tmpMemo);
+                this.listMemo.add(tmpMemo);
+            }
+
+        }
 
         this.memoAdapter = new MemoAdapter(this.listMemo, this);
         this.recyclerView.setAdapter(this.memoAdapter);
